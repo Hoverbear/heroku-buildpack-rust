@@ -15,17 +15,19 @@ RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
 mkdir -p "$CACHE_DIR"
 
 if [ ! -f "$CACHE_DIR/rustup" ]; then
+    echo "-----> Installing rustup"
     # Get Rustup, install.
     curl $RUSTUP_URL > "$CACHE_DIR/rustup"
     chmod +x "$CACHE_DIR/rustup"
 else
-    echo "-----> rustup pre-cached"
+    echo "-----> Pre-cached rustup"
 fi;
 
 if [ ! -f "$CACHE_DIR/rust/bin/rustc" ]; then
+    echo "-----> Installing rust"
     $CACHE_DIR/rustup --channel="$CHANNEL" --disable-sudo --prefix="$CACHE_DIR/rust" --yes
 else
-    echo "-----> rust pre-cached"
+    echo "-----> Pre-cached rust"
 fi;
 
 # Setup ENV
