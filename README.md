@@ -1,5 +1,7 @@
 # heroku-buildpack-rust
 
+[![Build Status](https://travis-ci.org/Hoverbear/heroku-buildpack-rust.svg?branch=master)](https://travis-ci.org/Hoverbear/heroku-buildpack-rust)
+
 ## Instructions
 
 ```bash
