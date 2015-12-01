@@ -7,16 +7,26 @@ set -o pipefail
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+CHANNEL="nightly"
 
 RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
 
 # Sometimes the directory doesn't exist.
 mkdir -p "$CACHE_DIR"
 
-# Get Rustup, install.
-curl $RUSTUP_URL > "$CACHE_DIR/rustup"
-chmod +x "$CACHE_DIR/rustup"
-$CACHE_DIR/rustup --channel="nightly" --disable-sudo --prefix="$CACHE_DIR/rust" --yes
+if [ ! -f "$CACHE_DIR/rustup" ]; then
+    # Get Rustup, install.
+    curl $RUSTUP_URL > "$CACHE_DIR/rustup"
+    chmod +x "$CACHE_DIR/rustup"
+else
+    echo "-----> rustup pre-cached"
+fi;
+
+if [ ! -f "$CACHE_DIR/rust/bin/rustc" ]; then
+    $CACHE_DIR/rustup --channel="$CHANNEL" --disable-sudo --prefix="$CACHE_DIR/rust" --yes
+else
+    echo "-----> rust pre-cached"
+fi;
 
 # Setup ENV
 export_env_dir() {
@@ -33,11 +43,11 @@ export_env_dir() {
     fi
   fi
 }
+
 export_env_dir "$ENV_DIR"
 export PATH="$PATH:$CACHE_DIR/rust/bin"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CACHE_DIR/rust/lib"
-export CARGO_HOME="$CACHE_DIR"
 
 # Build the Rust app
 cd "$BUILD_DIR"
-cargo build --release
+CARGO_HOME="$CACHE_DIR/cargo" cargo build --release
