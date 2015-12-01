@@ -1,4 +1,4 @@
-# heroku-rust-buildpacka
+# heroku-buildpack-rust
 
 ## Instructions
 
@@ -6,7 +6,7 @@
 APP="rust-buildpack-test" && \
 cargo new --bin $APP      && \
 cd $APP                   && \
-git init                  t && \
+git init                  && \
 heroku create $APP --buildpack https://github.com/Hoverbear/heroku-buildpack-rust && \
 echo "web: target/release/$APP" > Procfile
 ```
