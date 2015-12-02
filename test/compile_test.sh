@@ -38,8 +38,8 @@ fn main() {
 EOF
     compile
 
-    assertCaptured "-----> Installing rustup"
-    assertCaptured "-----> Installing rust"
+    assertCaptured "-----> Installing Rustup"
+    assertCaptured "-----> Installing Rust"
 
     rm -rf $PROJECT
 }
@@ -83,8 +83,8 @@ EOF
 
     compile
 
-    assertCaptured "-----> Pre-cached rustup"
-    assertCaptured "-----> Pre-cached rust"
+    assertCaptured "-----> Pre-cached Rustup"
+    assertCaptured "-----> Pre-cached Rust"
 
     rm -rf $PROJECT
 }
