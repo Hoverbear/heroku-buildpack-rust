@@ -4,32 +4,6 @@
 set -e
 set -o pipefail
 
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
-CHANNEL="nightly"
-
-RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
-
-# Sometimes the directory doesn't exist.
-mkdir -p "$CACHE_DIR"
-
-if [ ! -f "$CACHE_DIR/rustup" ]; then
-    echo "-----> Installing rustup"
-    # Get Rustup, install.
-    curl $RUSTUP_URL > "$CACHE_DIR/rustup"
-    chmod +x "$CACHE_DIR/rustup"
-else
-    echo "-----> Pre-cached rustup"
-fi;
-
-if [ ! -f "$CACHE_DIR/rust/bin/rustc" ]; then
-    echo "-----> Installing rust"
-    $CACHE_DIR/rustup --channel="$CHANNEL" --disable-sudo --prefix="$CACHE_DIR/rust" --yes
-else
-    echo "-----> Pre-cached rust"
-fi;
-
 # Setup ENV
 export_env_dir() {
   local env_dir=$1
@@ -45,10 +19,45 @@ export_env_dir() {
     fi
   fi
 }
-
 export_env_dir "$ENV_DIR"
+
+# Build related variables.
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+if [ -z "$RUSTC_CHANNEL" ]; then
+    echo "------> Setting \$CHANNEL to the default value 'nightly'"
+    RUSTC_CHANNEL=nightly
+fi
+RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
+
+# Buildpack related env.
 export PATH="$PATH:$CACHE_DIR/rust/bin"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CACHE_DIR/rust/lib"
+
+# Sometimes the directory doesn't exist.
+mkdir -p "$CACHE_DIR"
+
+# See if we already have Rustup.
+if [ ! -f "$CACHE_DIR/rustup" ]; then
+    echo "-----> Installing Rustup"
+    # Get Rustup, install.
+    curl $RUSTUP_URL > "$CACHE_DIR/rustup"
+    chmod +x "$CACHE_DIR/rustup"
+else
+    echo "-----> Pre-cached Rustup"
+fi;
+
+# See if we already have Rust & Friends.
+if [ ! -f "$CACHE_DIR/rust/bin/rustc" ]; then
+    RUST_VERSION="$(rustc --version)"
+    RUST_VERSION_DATE="$(rustc --version | grep -oh "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]")"
+    echo "-----> Installing Rust"
+    $CACHE_DIR/rustup --channel="$RUSTC_CHANNEL" --disable-sudo --prefix="$CACHE_DIR/rust" --yes
+else
+    echo "-----> Pre-cached Rust"
+fi;
+
 
 # Build the Rust app
 cd "$BUILD_DIR"
