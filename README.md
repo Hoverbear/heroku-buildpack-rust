@@ -37,7 +37,7 @@ fn main() {
     }
 
     let url = format!("0.0.0.0:{}", env::var("PORT").unwrap());
-    
+
     println!("Binding on {:?}", url);
     Iron::new(hello_world).http(&url[..]).unwrap();
     println!("Bound on {:?}", url);
@@ -59,3 +59,13 @@ heroku ps:scale web=1
 ```
 
 Now you can visit [`https://$APP.herokuapp.com/`](https://rust-buildpack-test.herokuapp.com/) and see your application!
+
+## Testing
+
+If you have Docker, you can test this buildpack by doing the following:
+
+```bash
+make
+```
+
+The `Makefile` defines how to pull down the testrunner and build the appropriate docker container, then test the buildpack.
