@@ -4,5 +4,5 @@ heroku-buildpack-testrunner/:
 	git clone git@github.com:heroku/heroku-buildpack-testrunner.git
 	docker build --tag heroku/testrunner heroku-buildpack-testrunner
 
-test: heroku-buildpack-testrunner/
+test: heroku-buildpack-testrunner/ test/* bin/*
 	docker run --rm --interactive --tty=true --volume $(shell pwd):/app/buildpack:ro heroku/testrunner

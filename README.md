@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.org/Hoverbear/heroku-buildpack-rust.svg?branch=master)](https://travis-ci.org/Hoverbear/heroku-buildpack-rust)
 
+**Features:**
+
+* Cached `rustup`, Rust toolchain.
+* Auto-updating of toolchain.
+
 ## Instructions
 
 ```bash
@@ -12,6 +17,14 @@ git init                  && \
 heroku create $APP --buildpack https://github.com/Hoverbear/heroku-buildpack-rust && \
 echo "web: target/release/$APP" > Procfile
 ```
+
+## Configuration
+
+All buildpack configuration is done via a few environment variables which correspond to the values from ``rustup --help`, with the exception that `nightly` is the default instead of `beta`. You can set these values with, for example, `heroku config:set RUSTC_CHANNEL=beta`.
+
+* `RUSTC_CHANNEL` (Default `nightly`)
+* `RUSTC_REVISION` (Only when `RUSTC_CHANNEL=stable`)
+* `RUSTC_DATE` (Defaults to latest)
 
 ## Example App
 
