@@ -7,6 +7,14 @@
 * Cached `rustup`, Rust toolchain.
 * Auto-updating of toolchain.
 
+## Configuration
+
+All buildpack configuration is done via a few environment variables which correspond to the values from ``rustup --help`, with the exception that `nightly` is the default instead of `beta`. You can set these values with, for example, `heroku config:set RUSTC_CHANNEL=beta`.
+
+* `RUSTC_CHANNEL` (Default `nightly`)
+* `RUSTC_REVISION` (Only when `RUSTC_CHANNEL=stable`)
+* `RUSTC_DATE` (Defaults to latest)
+
 ## Instructions
 
 ```bash
@@ -17,14 +25,6 @@ git init                  && \
 heroku create $APP --buildpack https://github.com/Hoverbear/heroku-buildpack-rust && \
 echo "web: target/release/$APP" > Procfile
 ```
-
-## Configuration
-
-All buildpack configuration is done via a few environment variables which correspond to the values from ``rustup --help`, with the exception that `nightly` is the default instead of `beta`. You can set these values with, for example, `heroku config:set RUSTC_CHANNEL=beta`.
-
-* `RUSTC_CHANNEL` (Default `nightly`)
-* `RUSTC_REVISION` (Only when `RUSTC_CHANNEL=stable`)
-* `RUSTC_DATE` (Defaults to latest)
 
 ## Example App
 
@@ -65,7 +65,8 @@ git commit -m "Init"                    && \
 git push heroku master
 ```
 
-Heroku should then build your application. Finally, start your application's `web` dyno with:
+Heroku should then build your application. Finally, you *may* need to start your
+application's `web` dyno with:
 
 ```bash
 heroku ps:scale web=1
