@@ -4,6 +4,12 @@
 set -e
 set -o pipefail
 
+# Build related variables.
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
+
 # Remove any possible trade of a `target/` dir from a potential earlier build or mistake.
 rm -rf $BUILD_DIR/target
 
@@ -24,12 +30,6 @@ export_env_dir() {
   fi
 }
 export_env_dir "$ENV_DIR"
-
-# Build related variables.
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
-RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
 
 # Buildpack related env.
 export PATH="$PATH:$CACHE_DIR/rust/bin"
