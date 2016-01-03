@@ -10,6 +10,10 @@ CACHE_DIR=$2
 ENV_DIR=$3
 RUSTUP_URL="https://static.rust-lang.org/rustup.sh"
 
+RUSTC_CHANNEL="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=channel = \")[^\"]*")" || true
+RUSTC_DATE="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=date = \")[^\"]*")" || true
+RUSTC_REVISION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=revision = \")[^\"]*")" || true
+
 # Remove any possible trade of a `target/` dir from a potential earlier build or mistake.
 rm -rf $BUILD_DIR/target
 
@@ -86,9 +90,9 @@ fi;
 # Make sure the channel is defined, else choose a sane default.
 if [ -z "$RUSTC_CHANNEL" ]; then
     export RUSTC_CHANNEL="nightly"
-    log "Using \$RUSTC_CHANNEL as $RUSTC_CHANNEL (default)."
+    log "Using channel as $RUSTC_CHANNEL (default)."
 else
-    log "Using \$RUSTC_CHANNEL as $RUSTC_CHANNEL."
+    log "Using channel as $RUSTC_CHANNEL."
 fi
 
 # See if we already have Rust & Friends.

@@ -37,8 +37,9 @@ testDefault()
     # Check Basic
     echo "Default: Testing Basic"
     compile
+
     assertCaptured "------> Installing Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as nightly (default)."
+    assertCaptured "------> Using channel as nightly (default)."
     assertCaptured "------> No cached Rust detected."
     assertCaptured "------> Installing latest Rust nightly."
     assertCaptured "------> Compiling Application."
@@ -47,7 +48,7 @@ testDefault()
     echo "Default: Testing Caching"
     compile
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as nightly (default)."
+    assertCaptured "------> Using channel as nightly (default)."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
@@ -57,147 +58,159 @@ testDefault()
 
 testNightly()
 {
-    export RUSTC_CHANNEL="nightly"
     setup
+    cat >> $BUILD_DIR/Cargo.toml <<EOF
+[target.heroku]
+channel = "nightly"
+EOF
 
     # Check Basic
-    echo "$RUSTC_CHANNEL: Testing Basic"
+    echo "Nightly: Testing Basic"
     compile
     assertCaptured "------> Installing Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as nightly."
+    assertCaptured "------> Using channel as nightly."
     assertCaptured "------> No cached Rust detected."
     assertCaptured "------> Installing latest Rust nightly."
     assertCaptured "------> Compiling Application."
 
     # Check Cache
-    echo "$RUSTC_CHANNEL: Testing Basic"
+    echo "Nightly: Testing Caching"
     compile
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as nightly."
+    assertCaptured "------> Using channel as nightly."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
 
     # Check Specific Date
-    echo "$RUSTC_CHANNEL: Testing Specific Date"
-    export RUSTC_DATE="2015-12-12"
+    echo "Nightly: Testing Specific Date"
+    cat >> $BUILD_DIR/Cargo.toml <<EOF
+date = "2015-12-12"
+EOF
     compile
 
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as nightly."
+    assertCaptured "------> Using channel as nightly."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
 
     # Check Updating.
-    echo "$RUSTC_CHANNEL: Testing Updating"
-    unset RUSTC_DATE
+    echo "Nightly: Testing Updating"
+    sed -i "$ d" $BUILD_DIR/Cargo.toml # Delete the last line.
     compile
 
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as nightly."
+    assertCaptured "------> Using channel as nightly."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
 
     cleanup
-    unset RUSTC_CHANNEL
 }
 
 testBeta()
 {
-    export RUSTC_CHANNEL="beta"
     setup
+    cat >> $BUILD_DIR/Cargo.toml <<EOF
+[target.heroku]
+channel = "beta"
+EOF
 
     # Check Basic.
-    echo "$RUSTC_CHANNEL: Testing Basic"
+    echo "Beta: Testing Basic"
     compile
     assertCaptured "------> Installing Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as beta."
+    assertCaptured "------> Using channel as beta."
     assertCaptured "------> No cached Rust detected."
     assertCaptured "------> Installing latest Rust beta."
     assertCaptured "------> Compiling Application."
 
     # Check Cache.
-    echo "$RUSTC_CHANNEL: Testing Caching"
+    echo "Beta: Testing Caching"
     compile
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as beta."
+    assertCaptured "------> Using channel as beta."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
 
     # Check specific Date
-    echo "$RUSTC_CHANNEL: Testing Specific Date"
-    export RUSTC_DATE="2016-12-12"
+    echo "Beta: Testing Specific Date"
+    cat >> $BUILD_DIR/Cargo.toml <<EOF
+date = "2015-12-12"
+EOF
     compile
 
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as beta."
+    assertCaptured "------> Using channel as beta."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
 
     # Check Upgrading
-    echo "$RUSTC_CHANNEL: Testing Upgrading"
-    unset RUSTC_DATE
+    echo "Beta: Testing Upgrading"
+    sed -i "$ d" $BUILD_DIR/Cargo.toml # Delete the last line.
     compile
 
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as beta."
+    assertCaptured "------> Using channel as beta."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Pre-cached up-to-date Rust."
     assertCaptured "------> Compiling Application."
 
     cleanup
-    unset RUSTC_CHANNEL
 }
 
 testStable()
 {
-    export RUSTC_CHANNEL="stable"
     setup
+    cat >> $BUILD_DIR/Cargo.toml <<EOF
+[target.heroku]
+channel = "stable"
+EOF
 
     # Check Basic
-    echo "$RUSTC_CHANNEL: Testing Basic"
+    echo "Stable: Testing Basic"
     compile
     assertCaptured "------> Installing Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as stable."
+    assertCaptured "------> Using channel as stable."
     assertCaptured "------> No cached Rust detected."
     assertCaptured "------> Installing latest Rust stable."
     assertCaptured "------> Compiling Application."
 
     # Check Caching
-    echo "$RUSTC_CHANNEL: Testing Caching"
+    echo "Stable: Testing Caching"
     compile
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as stable."
+    assertCaptured "------> Using channel as stable."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Compiling Application."
 
     # Check Specific Revision
-    echo "$RUSTC_CHANNEL: Testing Specific Revision"
-    export RUSTC_REVISION="1.4.0"
+    echo "Stable: Testing Specific Revision"
+    cat >> $BUILD_DIR/Cargo.toml <<EOF
+revision = "1.4.0"
+EOF
     compile
 
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as stable."
+    assertCaptured "------> Using channel as stable."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Rust revision not what is specified by \$RUSTC_REVISION."
     assertCaptured "------> Installing Rust revision 1.4.0."
     assertCaptured "------> Compiling Application."
 
     # Check Updating
-    echo "$RUSTC_CHANNEL: Testing Updating"
-    unset RUSTC_REVISION
+    echo "Stable: Testing Updating"
+    sed -i "$ d" $BUILD_DIR/Cargo.toml # Delete the last line.
     compile
 
     assertCaptured "------> Pre-cached Rustup."
-    assertCaptured "------> Using \$RUSTC_CHANNEL as stable."
+    assertCaptured "------> Using channel as stable."
     assertCaptured "------> Cached Rust detected, checking..."
     assertCaptured "------> Rust revision not specified, installing newest stable."
     assertCaptured "------> Compiling Application."
 
     cleanup
-    unset RUSTC_CHANNEL
 }
