@@ -9,11 +9,30 @@
 
 ## Configuration
 
-All buildpack configuration is done via a few environment variables which correspond to the values from ``rustup --help`, with the exception that `nightly` is the default instead of `beta`. You can set these values with, for example, `heroku config:set RUSTC_CHANNEL=beta`.
+Currently we abuse the `Cargo.toml` file and use a `[target.heroku]` item. By
+default the buildpack will use the latest `nightly` builds.
 
-* `RUSTC_CHANNEL` (Default `nightly`)
-* `RUSTC_REVISION` (Only when `RUSTC_CHANNEL=stable`)
-* `RUSTC_DATE` (Defaults to latest)
+The variables are:
+
+* `channel`: Choose between `nightly` (default), `beta`, and `stable`.
+* `revision`: *(Only if `stable`)* Choose the revision of the build desired. Eg. `1.4.0`.
+* `date`: *(Only if `beta`/`nightly`)* Choose the date of the build desired. Eg. `2015-01-01`.
+
+Example:
+
+```toml
+[package]
+name = "foo"
+version = "0.1.0"
+authors = ["Andrew Hobden <andrew@hoverbear.org>"]
+
+[dependencies]
+iron = "*"
+
+[target.heroku]
+channel = "beta"
+date = "2015-12-25"
+```
 
 ## Instructions
 
