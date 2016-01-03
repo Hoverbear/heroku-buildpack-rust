@@ -37,7 +37,7 @@ testDefault()
     compile
 
     assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting override to \"nightly\" (default)."
+    assertCaptured "-----> Setting version to \"nightly\" (default)."
     assertCaptured "-----> Compiling Application."
 
     cleanup
@@ -48,13 +48,13 @@ testNightly()
     setup
     cat >> $BUILD_DIR/Cargo.toml <<EOF
     [target.heroku]
-    override = "nightly"
+    version = "nightly"
 EOF
 
     compile
 
     assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting override to \"nightly\"."
+    assertCaptured "-----> Setting version to \"nightly\"."
     assertCaptured "-----> Compiling Application."
 
     cleanup
@@ -65,13 +65,13 @@ testBeta()
     setup
     cat >> $BUILD_DIR/Cargo.toml <<EOF
     [target.heroku]
-    override = "beta"
+    version = "beta"
 EOF
 
     compile
 
     assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting override to \"beta\"."
+    assertCaptured "-----> Setting version to \"beta\"."
     assertCaptured "-----> Compiling Application."
 
     cleanup
@@ -82,13 +82,13 @@ testStable()
     setup
     cat >> $BUILD_DIR/Cargo.toml <<EOF
     [target.heroku]
-    override = "stable"
+    version = "stable"
 EOF
 
     compile
 
     assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting override to \"stable\"."
+    assertCaptured "-----> Setting version to \"stable\"."
     assertCaptured "-----> Compiling Application."
 
     cleanup

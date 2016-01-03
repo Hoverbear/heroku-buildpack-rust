@@ -38,7 +38,7 @@ if [[ ! -d "$CACHE_DIR/multirust" ]]; then
     cd $CACHE_DIR/multirust
     git submodule update --init 2> /dev/null
     ./build.sh
-    ./install.sh --prefix=$CACHE_DIR/multirust
+    ./install.sh --prefix=$CACHE_DIR/multirust-cache
 else
     log "Pre-existing multirust."
 fi
@@ -48,13 +48,13 @@ export PATH="$PATH:$CACHE_DIR/multirust/bin"
 cd "$BUILD_DIR"
 
 # Use Multirust
-MULTIRUST_OVERRIDE="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=override = \")[^\"]*")" || true
-if [[ -z "$MULTIRUST_OVERRIDE" ]]; then
-    log "Setting override to \"nightly\" (default)."
-    multirust override "nightly"
+MULTIRUST_VERION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
+if [[ -z "$MULTIRUST_VERION" ]]; then
+    log "Setting version to \"nightly\" (default)."
+    multirust default "nightly"
 else
-    log "Setting override to \"$MULTIRUST_OVERRIDE\"."
-    multirust override "$MULTIRUST_OVERRIDE"
+    log "Setting version to \"$MULTIRUST_VERION\"."
+    multirust default "$MULTIRUST_VERION"
 fi
 multirust update 2> /dev/null
 
