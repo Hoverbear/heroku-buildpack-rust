@@ -16,7 +16,11 @@ The variables are:
 
 * `channel`: Choose between `nightly` (default), `beta`, and `stable`.
 * `revision`: *(Only if `stable`)* Choose the revision of the build desired. Eg. `1.4.0`.
-* `date`: *(Only if `beta`/`nightly`)* Choose the date of the build desired. Eg. `2015-01-01`.
+* `date`: *(Only if nightly`)* Choose the date of the build desired. Eg. `2015-01-01`.
+
+> Note: I was not able to get `beta` working with specific dates. If this is
+> important to you, please let me know and I'll give it another shot. Feel free
+> to make a PR.
 
 Example:
 
