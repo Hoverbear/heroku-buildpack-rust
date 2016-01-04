@@ -4,7 +4,7 @@
 
 **Features:**
 
-* Cached `rustup`, Rust toolchain.
+* Cached `multirust`, Rust toolchain.
 * Auto-updating of toolchain.
 
 ## Configuration
@@ -12,15 +12,7 @@
 Currently we abuse the `Cargo.toml` file and use a `[target.heroku]` item. By
 default the buildpack will use the latest `nightly` builds.
 
-The variables are:
-
-* `channel`: Choose between `nightly` (default), `beta`, and `stable`.
-* `revision`: *(Only if `stable`)* Choose the revision of the build desired. Eg. `1.4.0`.
-* `date`: *(Only if nightly`)* Choose the date of the build desired. Eg. `2015-01-01`.
-
-> Note: I was not able to get `beta` working with specific dates. If this is
-> important to you, please let me know and I'll give it another shot. Feel free
-> to make a PR.
+You can use any override you would pass multirust here.
 
 Example:
 
@@ -34,8 +26,7 @@ authors = ["Andrew Hobden <andrew@hoverbear.org>"]
 iron = "*"
 
 [target.heroku]
-channel = "beta"
-date = "2015-12-25"
+override = "1.3.0-beta"
 ```
 
 ## Instructions
