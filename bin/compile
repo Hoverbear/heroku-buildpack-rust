@@ -34,18 +34,15 @@ log() {
 # Install multirust
 if [[ ! -d "$CACHE_DIR/multirust" ]]; then
     log "Fetching multirust..."
-    git clone --recursive https://github.com/brson/multirust $CACHE_DIR/multirust 2> /dev/null
-    cd $CACHE_DIR/multirust
-    git submodule update --init 2> /dev/null
+    git clone --recursive https://github.com/brson/multirust /tmp/multirust-repo
+    cd /tmp/multirust-repo
+    git submodule update --init
     ./build.sh
-    ./install.sh --prefix=$CACHE_DIR/multirust-cache
+    ./install.sh --prefix=$CACHE_DIR/multirust
 else
     log "Pre-existing multirust."
 fi
 export PATH="$PATH:$CACHE_DIR/multirust/bin"
-
-# Change into correct directory.
-cd "$BUILD_DIR"
 
 # Use Multirust
 MULTIRUST_VERION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
@@ -57,6 +54,9 @@ else
     multirust default "$MULTIRUST_VERION"
 fi
 multirust update 2> /dev/null
+
+# Change into correct directory.
+cd "$BUILD_DIR"
 
 # Build the Rust app
 log "Compiling Application..."

@@ -28,6 +28,8 @@ EOF
 cleanup()
 {
     rm -rf $BUILD_DIR
+    rm -rf $CACHE_DIR
+    rm -rf /tmp/multirust-repo
 }
 
 testDefault()
