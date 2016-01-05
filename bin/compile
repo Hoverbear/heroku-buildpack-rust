@@ -40,7 +40,7 @@ if [[ ! -d "$CACHE_DIR/multirust" ]]; then
     ./build.sh
     ./install.sh --destdir="$CACHE_DIR/multirust" --prefix=""
 else
-    log "Pre-existing multirust."
+    log "Pre-existing multirust"
 fi
 export PATH="$PATH:$CACHE_DIR/multirust/bin"
 
@@ -50,16 +50,26 @@ export HOME="$CACHE_DIR"
 # Use Multirust
 MULTIRUST_VERION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
 if [[ -z "$MULTIRUST_VERION" ]]; then
-    log "Setting version to \"nightly\" (default)."
+    log "Setting version to \"nightly\" (default)"
     multirust default "nightly"
 else
-    log "Setting version to \"$MULTIRUST_VERION\"."
+    log "Setting version to \"$MULTIRUST_VERION\""
     multirust default "$MULTIRUST_VERION"
 fi
 
 # Change into correct directory.
 cd "$BUILD_DIR"
 
+if [[ ! -d "$CACHE_DIR/target" ]]; then
+    log "No cached crates detected"
+else
+    log "Detected cached crates... Restoring..."
+    mv "$CACHE_DIR/target" "$BUILD_DIR/target"
+fi
+
 # Build the Rust app
-log "Compiling Application..."
+log "Compiling application..."
 CARGO_HOME="$CACHE_DIR/cargo" cargo build --release
+
+log "Caching build artifacts"
+cp -r "$BUILD_DIR/target" "$CACHE_DIR/target"

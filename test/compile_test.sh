@@ -12,10 +12,16 @@ setup()
     name = "$PROJECT"
     version = "0.1.0"
     authors = ["Andrew Hobden <andrew@hoverbear.org>"]
+
+    [dependencies]
+    rand = "*"
 EOF
     cat > $BUILD_DIR/src/main.rs <<EOF
+    extern crate rand;
+
     fn main() {
-        println!("Hello world!");
+        let number = rand::random::<u64>();
+        println!("Hello world! Some random number is {}", number);
     }
 
     #[test]
@@ -38,13 +44,17 @@ testDefault()
 
     compile
 
-    assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting version to \"nightly\" (default)."
-    assertCaptured "-----> Compiling Application."
+    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Setting version to \"nightly\" (default)"
+    assertCaptured "-----> No cached crates detected"
+    assertCaptured "-----> Compiling application"
+    assertCaptured "-----> Caching build artifacts"
 
     compile
 
-    assertCaptured "-----> Pre-existing multirust."
+    assertCaptured "-----> Pre-existing multirust"
+    assertCaptured "multirust: using existing install for"
+    assertCaptured "-----> Detected cached crates... Restoring..."
 
     cleanup
 }
@@ -59,9 +69,11 @@ EOF
 
     compile
 
-    assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting version to \"nightly\"."
-    assertCaptured "-----> Compiling Application."
+    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Setting version to \"nightly\""
+    assertCaptured "-----> No cached crates detected"
+    assertCaptured "-----> Compiling application"
+    assertCaptured "-----> Caching build artifacts"
 
     cleanup
 }
@@ -76,9 +88,11 @@ EOF
 
     compile
 
-    assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting version to \"beta\"."
-    assertCaptured "-----> Compiling Application."
+    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Setting version to \"beta\""
+    assertCaptured "-----> No cached crates detected"
+    assertCaptured "-----> Compiling application"
+    assertCaptured "-----> Caching build artifacts"
 
     cleanup
 }
@@ -93,9 +107,11 @@ EOF
 
     compile
 
-    assertCaptured "-----> Fetching multirust."
-    assertCaptured "-----> Setting version to \"stable\"."
-    assertCaptured "-----> Compiling Application."
+    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Setting version to \"stable\""
+    assertCaptured "-----> No cached crates detected"
+    assertCaptured "-----> Compiling application"
+    assertCaptured "-----> Caching build artifacts"
 
     cleanup
 }
