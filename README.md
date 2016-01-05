@@ -5,14 +5,17 @@
 **Features:**
 
 * Cached `multirust`, Rust toolchain.
-* Auto-updating of toolchain.
+* Caching of previous build artifacts to (potentially dramatically) speed up
+similar builds.
+* Configurable version selection inside of the `Cargo.toml`.
 
 ## Configuration
 
-Currently we abuse the `Cargo.toml` file and use a `[target.heroku]` item. By
-default the buildpack will use the latest `nightly` builds.
+You can use any override you would pass `multirust` for this buildpack.
 
-You can use any override you would pass multirust here.
+We currently (ab)use the `cargo`'s "target" feature to set the version desired.
+Unfortunately because of this there are sometimes (harmless) `cargo` warnings
+about an unused value in the `toml` file.
 
 Example:
 
@@ -26,7 +29,7 @@ authors = ["Andrew Hobden <andrew@hoverbear.org>"]
 iron = "*"
 
 [target.heroku]
-override = "1.3.0-beta"
+version = "nightly"
 ```
 
 ## Instructions
@@ -86,7 +89,8 @@ application's `web` dyno with:
 heroku ps:scale web=1
 ```
 
-Now you can visit [`https://$APP.herokuapp.com/`](https://rust-buildpack-test.herokuapp.com/) and see your application!
+Now you can visit [`https://$APP.herokuapp.com/`](https://rust-buildpack-test.herokuapp.com/)
+and see your application!
 
 ## Testing
 
@@ -96,4 +100,5 @@ If you have Docker, you can test this buildpack by doing the following:
 make
 ```
 
-The `Makefile` defines how to pull down the testrunner and build the appropriate docker container, then test the buildpack.
+The `Makefile` defines how to pull down the testrunner and build the appropriate
+docker container, then test the buildpack.
