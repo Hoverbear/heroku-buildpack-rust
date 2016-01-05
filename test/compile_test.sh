@@ -42,6 +42,10 @@ testDefault()
     assertCaptured "-----> Setting version to \"nightly\" (default)."
     assertCaptured "-----> Compiling Application."
 
+    compile
+
+    assertCaptured "-----> Pre-existing multirust."
+
     cleanup
 }
 

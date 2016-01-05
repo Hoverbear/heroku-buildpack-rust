@@ -38,11 +38,14 @@ if [[ ! -d "$CACHE_DIR/multirust" ]]; then
     cd /tmp/multirust-repo
     git submodule update --init
     ./build.sh
-    ./install.sh --prefix=$CACHE_DIR/multirust
+    ./install.sh --destdir="$CACHE_DIR/multirust" --prefix=""
 else
     log "Pre-existing multirust."
 fi
 export PATH="$PATH:$CACHE_DIR/multirust/bin"
+
+# Hack because there seems to be no way to change where `multirust` places it's `.multirust` dir. :(
+export HOME="$CACHE_DIR"
 
 # Use Multirust
 MULTIRUST_VERION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
