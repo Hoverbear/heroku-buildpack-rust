@@ -44,8 +44,8 @@ else
 fi
 export PATH="$PATH:$CACHE_DIR/multirust/bin"
 
-# Hack because there seems to be no way to change where `multirust` places it's `.multirust` dir. :(
-export HOME="$CACHE_DIR"
+# Change where `multirust` places it's `.multirust` dir from the default `$HOME/.multirust`
+export MULTIRUST_HOME="$CACHE_DIR/.multirust"
 
 # Use Multirust
 MULTIRUST_VERION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
