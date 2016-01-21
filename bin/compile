@@ -48,13 +48,13 @@ export PATH="$PATH:$CACHE_DIR/multirust/bin"
 export MULTIRUST_HOME="$CACHE_DIR/.multirust"
 
 # Use Multirust
-MULTIRUST_VERION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
-if [[ -z "$MULTIRUST_VERION" ]]; then
+MULTIRUST_VERSION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
+if [[ -z "$MULTIRUST_VERSION" ]]; then
     log "Setting version to \"nightly\" (default)"
     multirust default "nightly"
 else
-    log "Setting version to \"$MULTIRUST_VERION\""
-    multirust default "$MULTIRUST_VERION"
+    log "Setting version to \"$MULTIRUST_VERSION\""
+    multirust default "$MULTIRUST_VERSION"
 fi
 
 # Change into correct directory.
