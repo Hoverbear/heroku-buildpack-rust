@@ -9,6 +9,9 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+echo "\$ENV_DIR = $ENV_DIR"
+
+
 # From Heroku's suggested docs.
 export_env_dir() {
   local env_dir=$1
