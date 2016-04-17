@@ -7,7 +7,7 @@
 * Cached `multirust`, Rust toolchain.
 * Caching of previous build artifacts to (potentially dramatically) speed up
 similar builds.
-* Configurable version selection inside of the `Cargo.toml`.
+* Configurable version selection inside of the `Cargo.toml`, or by specifying the `$RUST_VERSION` environment variable.
 
 ## Configuration
 

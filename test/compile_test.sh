@@ -36,6 +36,8 @@ cleanup()
     rm -rf $BUILD_DIR
     rm -rf $CACHE_DIR
     rm -rf /tmp/multirust-repo
+
+    unset RUST_VERSION
 }
 
 testDefault()
@@ -109,6 +111,22 @@ EOF
 
     assertCaptured "-----> Fetching multirust"
     assertCaptured "-----> Setting version to \"stable\""
+    assertCaptured "-----> No cached crates detected"
+    assertCaptured "-----> Compiling application"
+    assertCaptured "-----> Caching build artifacts"
+
+    cleanup
+}
+
+testVersionEnvironmentOverride()
+{
+    setup
+
+    export RUST_VERSION=nightly-2016-04-15
+    compile
+
+    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Setting version to \"nightly-2016-04-15\""
     assertCaptured "-----> No cached crates detected"
     assertCaptured "-----> Compiling application"
     assertCaptured "-----> Caching build artifacts"
