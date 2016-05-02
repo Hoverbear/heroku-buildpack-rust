@@ -57,9 +57,11 @@ fi
 if [[ -z "$MULTIRUST_VERSION" ]]; then
     log "Setting version to \"nightly\" (default)"
     multirust default "nightly"
+    multirust update "nightly"
 else
     log "Setting version to \"$MULTIRUST_VERSION\""
     multirust default "$MULTIRUST_VERSION"
+    multirust update "$MULTIRUST_VERSION"
 fi
 
 # Change into correct directory.
