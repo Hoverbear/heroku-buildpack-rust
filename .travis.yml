@@ -10,5 +10,5 @@ env:
 
 before_install:
     - git clone https://github.com/heroku/heroku-buildpack-testrunner.git /tmp/testrunner
-    - svn checkout http://shunit2.googlecode.com/svn/trunk/ /tmp/shunit2
+    - git clone https://github.com/smtlaissezfaire/shunit2 /tmp/shunit2
 script: /tmp/testrunner/bin/run -c .
