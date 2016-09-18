@@ -56,7 +56,7 @@ testDefault()
 
     assertCaptured "-----> Pre-existing multirust"
     assertCaptured "multirust: using existing install for"
-    assertCaptured "-----> Detected cached crates... Restoring..."
+    assertCaptured "-----> Deleting target/release/deps..."
 
     cleanup
 }
