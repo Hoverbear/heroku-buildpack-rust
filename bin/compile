@@ -31,45 +31,49 @@ log() {
     echo "-----> $1"
 }
 
-# Install multirust
-if [[ ! -d "$CACHE_DIR/multirust" ]]; then
-    log "Fetching multirust..."
-    git clone --recursive https://github.com/brson/multirust /tmp/multirust-repo
-    cd /tmp/multirust-repo
-    git submodule update --init
-    ./build.sh
-    ./install.sh --destdir="$CACHE_DIR/multirust" --prefix=""
-else
-    log "Pre-existing multirust"
-fi
-export PATH="$PATH:$CACHE_DIR/multirust/bin"
+# rust-lang-nursery/rustup.rs#618
+exec_cmd() {
+    CARGO_HOME="$CACHE_DIR/.cargo" RUSTUP_HOME="$CACHE_DIR/.rustup" bash -c "$1"
+}
 
-# Change where `multirust` places it's `.multirust` dir from the default `$HOME/.multirust`
-export MULTIRUST_HOME="$CACHE_DIR/.multirust"
-
-# Use Multirust
+# Select the Rust version
 if [ -n "$RUST_VERSION" ]; then
-  MULTIRUST_VERSION="$RUST_VERSION"
+    RUSTUP_VERSION="$RUST_VERSION"
 else
-  MULTIRUST_VERSION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
+    RUSTUP_VERSION="$(cat $BUILD_DIR/Cargo.toml | grep -ohzP "(?<=\[target.heroku\])[^\[]*" | grep -ohzP "(?<=version = \")[^\"]*")" || true
 fi
 
-if [[ -z "$MULTIRUST_VERSION" ]]; then
-    log "Setting version to \"nightly\" (default)"
-    multirust default "nightly"
-    multirust update "nightly"
+# Install rustup.sh
+if [[ ! -d "$CACHE_DIR/.rustup" ]]; then
+    log "Fetching rustup.sh..."
+    exec_cmd "curl https://sh.rustup.rs -sSf | sh -s -- -y"
 else
-    log "Setting version to \"$MULTIRUST_VERSION\""
-    multirust default "$MULTIRUST_VERSION"
-    multirust update "$MULTIRUST_VERSION"
+    log "Pre-existing rustup.sh"
 fi
+
+# Add rustup.sh binaries to $PATH
+export PATH="$PATH:$CACHE_DIR/.cargo/bin"
+
+if [[ -z "$RUSTUP_VERSION" ]]; then
+    log "Setting version to \"nightly\" (default)"
+    exec_cmd "rustup install nightly"
+    exec_cmd "rustup default nightly"
+else
+    log "Setting version to \"$RUSTUP_VERSION\""
+    exec_cmd "rustup install \"$RUSTUP_VERSION\""
+    exec_cmd "rustup default \"$RUSTUP_VERSION\""
+fi
+
+# Check if there are updates
+log "Updating rustup.sh..."
+exec_cmd "rustup update"
 
 # Change into correct directory
 cd "$BUILD_DIR"
 
 # Build the Rust app
 log "Compiling application..."
-CARGO_HOME="$CACHE_DIR/cargo" cargo build --release
+exec_cmd "cargo build --release"
 
 # Remove the cache
 log "Deleting target/release/deps..."
