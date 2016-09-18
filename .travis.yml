@@ -1,14 +1,11 @@
 sudo: false
 language: bash
 
-addons:
-    apt:
-        packages:
-            - svn
 env:
     - SHUNIT_HOME="/tmp/shunit2/source/2.1"
 
 before_install:
     - git clone https://github.com/heroku/heroku-buildpack-testrunner.git /tmp/testrunner
     - git clone https://github.com/smtlaissezfaire/shunit2 /tmp/shunit2
+    - chmod +x /tmp/shunit2/source/2.1/src/shunit2
 script: /tmp/testrunner/bin/run -c .
