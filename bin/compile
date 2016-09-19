@@ -64,19 +64,13 @@ else
     multirust update "$MULTIRUST_VERSION"
 fi
 
-# Change into correct directory.
+# Change into correct directory
 cd "$BUILD_DIR"
-
-if [[ ! -d "$CACHE_DIR/target" ]]; then
-    log "No cached crates detected"
-else
-    log "Detected cached crates... Restoring..."
-    mv "$CACHE_DIR/target" "$BUILD_DIR/target"
-fi
 
 # Build the Rust app
 log "Compiling application..."
 CARGO_HOME="$CACHE_DIR/cargo" cargo build --release
 
-log "Caching build artifacts"
-cp -r "$BUILD_DIR/target" "$CACHE_DIR/target"
+# Remove the cache
+log "Deleting target/release/deps..."
+rm -r "target/release/deps"
