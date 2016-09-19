@@ -4,14 +4,10 @@
 
 **Features:**
 
-* Cached `multirust`, Rust toolchain.
-* Caching of previous build artifacts to (potentially dramatically) speed up
-similar builds.
-* Configurable version selection inside of the `Cargo.toml`, or by specifying the `$RUST_VERSION` environment variable.
+* Cached [rustup.sh](https://rustup.rs), the Rust toolchain installer.
+* Configurable Rust version selection inside of the `Cargo.toml`, or by specifying the `$RUST_VERSION` environment variable.
 
 ## Configuration
-
-You can use any override you would pass `multirust` for this buildpack.
 
 We currently (ab)use the `cargo`'s "target" feature to set the version desired.
 Unfortunately because of this there are sometimes (harmless) `cargo` warnings
