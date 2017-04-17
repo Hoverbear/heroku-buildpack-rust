@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+cat << EOF
+---
+default_process_types:
+  web: cargo run
+EOF
