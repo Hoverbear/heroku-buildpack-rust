@@ -1,3 +1,6 @@
+
+> Deprecated, please don't use this. It's far, far too old.
+
 # heroku-buildpack-rust
 
 [![Build Status](https://travis-ci.org/Hoverbear/heroku-buildpack-rust.svg?branch=master)](https://travis-ci.org/Hoverbear/heroku-buildpack-rust)
