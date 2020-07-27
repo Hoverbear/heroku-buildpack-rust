@@ -35,7 +35,6 @@ cleanup()
 {
     rm -rf $BUILD_DIR
     rm -rf $CACHE_DIR
-    rm -rf /tmp/multirust-repo
 
     unset RUST_VERSION
 }
@@ -46,16 +45,19 @@ testDefault()
 
     compile
 
-    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Fetching rustup.sh..."
     assertCaptured "-----> Setting version to \"nightly\" (default)"
-    assertCaptured "-----> No cached crates detected"
-    assertCaptured "-----> Compiling application"
-    assertCaptured "-----> Caching build artifacts"
+    assertCaptured "info: checking for self-updates"
+    assertCaptured "-----> Compiling application..."
+    assertCaptured "-----> Deleting target/release/deps..."
 
     compile
 
-    assertCaptured "-----> Pre-existing multirust"
-    assertCaptured "multirust: using existing install for"
+    assertCaptured "-----> Pre-existing rustup.sh"
+    assertCaptured "info: using existing install for 'stable-x86_64-unknown-linux-gnu'"
+    assertCaptured "info: default toolchain set to 'stable-x86_64-unknown-linux-gnu'"
+    assertCaptured "info: checking for self-updates"
+    assertCaptured "-----> Compiling application..."
     assertCaptured "-----> Deleting target/release/deps..."
 
     cleanup
@@ -71,11 +73,11 @@ EOF
 
     compile
 
-    assertCaptured "-----> Fetching multirust"
+    assertCaptured "-----> Fetching rustup.sh..."
     assertCaptured "-----> Setting version to \"nightly\""
-    assertCaptured "-----> No cached crates detected"
-    assertCaptured "-----> Compiling application"
-    assertCaptured "-----> Caching build artifacts"
+    assertCaptured "info: checking for self-updates"
+    assertCaptured "-----> Compiling application..."
+    assertCaptured "-----> Deleting target/release/deps..."
 
     cleanup
 }
@@ -90,11 +92,11 @@ EOF
 
     compile
 
-    assertCaptured "-----> Fetching multirust"
-    assertCaptured "-----> Setting version to \"beta\""
-    assertCaptured "-----> No cached crates detected"
-    assertCaptured "-----> Compiling application"
-    assertCaptured "-----> Caching build artifacts"
+    assertCaptured "-----> Fetching rustup.sh..."
+    assertCaptured "-----> Setting version to \"stable\""
+    assertCaptured "info: checking for self-updates"
+    assertCaptured "-----> Compiling application..."
+    assertCaptured "-----> Deleting target/release/deps..."
 
     cleanup
 }
